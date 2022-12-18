@@ -1,0 +1,8 @@
+{
+    "javascript.format.semicolons": "insert",
+    "javascript.preferences.quoteStyle": "single",
+    "javascript.suggest.autoImports": true,
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2
+}
