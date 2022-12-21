@@ -1,67 +1,63 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+<h1 align="center" ><strong>Rate limiter example</strong></h1>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This project is a back-end API with an example of rate limiter implemented using NestJS.
 
-## Description
+## **Tools used**
+### Node
+- Installation guide: https://nodejs.org/en/download/package-manager/
+    - For ubuntu: https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions
+- Getting started: https://nodejs.org/en/docs/guides/getting-started-guide/
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Other tools/libraries
+- NestJS: https://docs.nestjs.com/first-steps
+- Docker: https://www.docker.com/
 
-## Installation
+## **Macro architecture**
+<img src="images/macro-architecture.png" alt="macro-architecture" style="display:block; margin-left:auto; margin-right:auto; width: auto">
 
+Text
+
+<img src="images/macro-architecture_detail.png" alt="macro-architecture_detail" style="display:block; margin-left:auto; margin-right:auto; width: auto">
+
+Text
+
+## **How to run locally?**
+
+<ol>
+  <li>To run the code locally we need to have at least the <code>Node.js 16</code> and the <code>npm</code> tool installed in our system.</li>
+  <li>Install the dependencies with <code>npm i</code> or <code>yarn</code> and choose one of the next options (Using Node.js or Using docker).</li>
+  <li>Create a <code>.env</code> file from the <code>.env.example</code> file and add the right credentials.</li>
+</ol>
+
+### Using Node.js
+It's possible to run direct with the `Node.js` CLI.
 ```bash
-$ npm install
+npm start
 ```
-
-## Running the app
-
+It's also possible to run in watch model.
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run start:dev
 ```
+**We can check the available routes by accessing the** `localhost:3000/doc` **address**.
 
-## Test
+### Using docker
+To run on a container we need to have the docker installed.
 
-```bash
-# unit tests
-$ npm run test
+<ol>
+  <li><code>docker build -t rate-limiter-example .</code></li>
+  <li><code>docker run -d -p 3000:3000</code></li>
+</ol>
 
-# e2e tests
-$ npm run test:e2e
+#### Notes
+- The `-d` on `docker run` command means detach terminal mode. If you want to see the logs of the container you can remove this option or use `docker logs -f $container_id`.
+- **Useful** command:
+    ```bash
+    docker stop $container_id && \
+    docker build -t rate-limiter-example . && \
+    container_id=$(docker run -d -p 3000:3000 -p 9229:9229  rate-limiter-example) && \
+    echo $container_id && \
+    docker logs -f $container_id
+    ```
 
-# test coverage
-$ npm run test:cov
-```
-
-## Stay in touch
-
-- Author - Lucas Ferreira
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## **Database**
