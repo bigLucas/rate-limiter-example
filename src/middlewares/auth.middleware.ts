@@ -16,24 +16,25 @@ export class AuthMiddleware implements NestMiddleware {
   
       const authHeader = req.header('authorization')
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        res.status(404).send({ message: 'Missing authorization header' });
+        res.status(400).send({ message: 'Missing authorization header' });
         return;
       }
   
       const token = authHeader.split(' ')[1];
       if (!token) {
-        res.status(404).send({ message: 'Wrong token' });
+        res.status(400).send({ message: 'Wrong token' });
         return;
       }
   
       if (token === trustedToken) {
+        res.locals.token = token;
         next();
       } else {
-        res.status(404).send({ message: 'Unauthorized' });
+        res.status(401).send({ message: 'Unauthorized' });
       }
     } catch (error) {
       console.error(error.message);
-      res.status(500).send({ message: 'Something wrong on the auth middleware' });
+      res.status(500).send({ message: 'Something wrong in the auth middleware' });
       return;
     }
   }
