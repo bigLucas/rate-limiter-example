@@ -14,15 +14,23 @@ The implementation was based on this Redis article: https://developer.redis.com/
 ### Other tools/libraries
 - NestJS: https://docs.nestjs.com/first-steps
 - Docker: https://www.docker.com/
+- Redis: https://redis.io/
 
 ## **Macro architecture**
+
+The rate limiter is in the middleware layer that is before the controller layer. The rate limiter code will get the request and check how many request the token or IP has.
+
 <img src="images/macro-architecture.png" alt="macro-architecture" style="display:block; margin-left:auto; margin-right:auto; width: auto">
 
-Text
+The rate limiter middleware uses the rate limiter service and inside the service layer it is the redis client.
 
-<img src="images/macro-architecture_detail.png" alt="macro-architecture_detail" style="display:block; margin-left:auto; margin-right:auto; width: auto">
+The code is using the sorted set data structure to track the requests and manage the sliding window.
 
-Text
+<img src="images/redis-sorted-set.png" alt="redis-sorted-set" style="display:block; margin-left:auto; margin-right:auto; width: auto">
+
+Each member of a sorted set must be unique and each member will have a score, if they have the same score the redis will sort them by the member.
+
+The rate limiter service is also setting a experitaion time for each member, making the sliding window to clean the data.
 
 ## **How to run locally?**
 
