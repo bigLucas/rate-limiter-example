@@ -13,7 +13,7 @@ export class RateLimiterService {
     this.windowSize = +this.configService.get('RATE_LIMITING_WINDOW_IN_SECONDS');
   }
 
-  async check(identifier: string, isPrivate: boolean): Promise<RateLimiterCheck> {
+  async checkLimit(identifier: string, isPrivate: boolean): Promise<RateLimiterCheck> {
     const requestLimit = isPrivate ? 
       +this.configService.get('PRIVATE_RATE_LIMIT') : 
       +this.configService.get('PUBLIC_RATE_LIMIT');
@@ -37,7 +37,7 @@ export class RateLimiterService {
       result.isAllowed = true;
     } else {
       const oldestReqTime = +(await this.client.zRange(identifier, 0, 0))[0];
-      const timeForNextReq = oldestReqTime + this.windowSize;
+      const timeForNextReq = oldestReqTime + (this.windowSize*1000);
       result.reachedLimit = requestLimit;
       result.timeForNextReq = new Date(timeForNextReq).toISOString();
     }

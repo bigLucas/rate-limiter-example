@@ -3,6 +3,8 @@
 
 This project is a back-end API with an example of rate limiter implemented using NestJS.
 
+The implementation was based on this Redis article: https://developer.redis.com/develop/dotnet/aspnetcore/rate-limiting/sliding-window/
+
 ## **Tools used**
 ### Node
 - Installation guide: https://nodejs.org/en/download/package-manager/

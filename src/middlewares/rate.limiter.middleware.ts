@@ -15,7 +15,7 @@ export class RateLimiterMiddleware implements NestMiddleware {
         return;
       }
 
-      const result = await this.rateLimiterService.check(identifier, req.path.includes('private'));
+      const result = await this.rateLimiterService.checkLimit(identifier, req.path.includes('private'));
       if (result.isAllowed) {
         next();
       } else {
