@@ -24,7 +24,7 @@ It uses the rate limiter service and inside the service layer there is the redis
 
 <img src="images/redis-sorted-set.png" alt="redis-sorted-set" style="display:block; margin-left:auto; margin-right:auto; width: auto">
 
-Each member of a sorted set must be unique and each member will have a score, if two members have the same score, redis will decide which will come first by the member value.
+Each member of a sorted set must be unique and each member will have a score, if two members have the same score, redis will decide which will come first by the member value. The sorted set has a key value and the code is using the token or IP as the key.
 
 The rate limiter service is also setting a expiration time for each member, so we can use the redis TTL to clean the old data.
 
@@ -37,6 +37,10 @@ The rate limiter service is also setting a expiration time for each member, so w
 </ol>
 
 ### Using Node.js
+The database used by the rate limiter is the redis, we can use the docker image to get a redis DB running quickly.
+```bash
+docker run -d -p 6379:6379 redis
+```
 ```bash
 npm i
 ```
@@ -48,9 +52,9 @@ It's also possible to run in watch model.
 ```bash
 npm run start:dev
 ```
-The database used by the rate limiter is the redis, we can use the docker image to get a redis DB running quickly.
+One line command
 ```bash
-docker run -d -p 6379:6379 redis
+docker run -d -p 6379:6379 redis && npm start
 ```
 
 ### Using docker
