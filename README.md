@@ -1,9 +1,7 @@
 <h1 align="center" ><strong>Rate limiter example</strong></h1>
 
 
-This project is a back-end API with an example of rate limiter implemented using NestJS.
-
-The implementation was based on this Redis article: https://developer.redis.com/develop/dotnet/aspnetcore/rate-limiting/sliding-window/
+This project is a back-end API with an example of rate limiter implemented using NestJS. The implementation was based on this **Redis** article: https://developer.redis.com/develop/dotnet/aspnetcore/rate-limiting/sliding-window/
 
 ## **Tools used**
 ### Node
@@ -22,15 +20,13 @@ The rate limiter is in the middleware layer that is before the controller layer.
 
 <img src="images/macro-architecture.png" alt="macro-architecture" style="display:block; margin-left:auto; margin-right:auto; width: auto">
 
-The rate limiter middleware uses the rate limiter service and inside the service layer it is the redis client.
-
-The code is using the sorted set data structure to track the requests and manage the sliding window.
+It uses the rate limiter service and inside the service layer there is the redis client. The code is using a [sorted set data structure](https://redis.io/docs/data-types/sorted-sets/) to track the requests and manage the sliding window.
 
 <img src="images/redis-sorted-set.png" alt="redis-sorted-set" style="display:block; margin-left:auto; margin-right:auto; width: auto">
 
-Each member of a sorted set must be unique and each member will have a score, if they have the same score the redis will sort them by the member.
+Each member of a sorted set must be unique and each member will have a score, if two members have the same score, redis will decide which will come first by the member value.
 
-The rate limiter service is also setting a experitaion time for each member, making the sliding window to clean the data.
+The rate limiter service is also setting a expiration time for each member, so we can use the redis TTL to clean the old data.
 
 ## **How to run locally?**
 
@@ -41,7 +37,10 @@ The rate limiter service is also setting a experitaion time for each member, mak
 </ol>
 
 ### Using Node.js
-It's possible to run direct with the `Node.js` CLI.
+```bash
+npm i
+```
+Use the start command.
 ```bash
 npm start
 ```
@@ -49,25 +48,37 @@ It's also possible to run in watch model.
 ```bash
 npm run start:dev
 ```
-**We can check the available routes by accessing the** `localhost:3000/doc` **address**.
+The database used by the rate limiter is the redis, we can use the docker image to get a redis DB running quickly.
+```bash
+docker run -d -p 6379:6379 redis
+```
 
 ### Using docker
-To run on a container we need to have the docker installed.
+To run on a container we need to have the **docker** installed.
 
 <ol>
-  <li><code>docker build -t rate-limiter-example .</code></li>
-  <li><code>docker run -d -p 3000:3000</code></li>
+  <li><code>docker build -t rate-limiter-example . --network host</code></li>
+  <li><code>docker run -d -p 3000:3000 --network="host" rate-limiter-example && docker run -d -p 6379:6379 redis</code></li>
 </ol>
+
+The Dockerfile is copying the local `.env` file to the final image.
 
 #### Notes
 - The `-d` on `docker run` command means detach terminal mode. If you want to see the logs of the container you can remove this option or use `docker logs -f $container_id`.
-- **Useful** command:
-    ```bash
-    docker stop $container_id && \
-    docker build -t rate-limiter-example . && \
-    container_id=$(docker run -d -p 3000:3000 -p 9229:9229  rate-limiter-example) && \
-    echo $container_id && \
-    docker logs -f $container_id
-    ```
 
-## **Database**
+## **Curls to test the server**
+- Call the `private` route passing the token/UUID:
+  ```bash
+  curl "localhost:3000/private" -H 'Authorization:Bearer cc80bf47-fbbd-4cd1-8aa9-cf669adda2b3'
+  ```
+- Or, call the `public` route passing the IP:
+  ```bash
+  curl "localhost:3000/public" -H 'X-Forwarded-For:192.0.0.1'
+  ```
+We can set the limits and the window size in the `.env` file.
+```text
+UUID_TOKEN=cc80bf47-fbbd-4cd1-8aa9-cf669adda2b3
+RATE_LIMITING_WINDOW_IN_SECONDS=3600
+PUBLIC_RATE_LIMIT=100
+PRIVATE_RATE_LIMIT=200
+```
