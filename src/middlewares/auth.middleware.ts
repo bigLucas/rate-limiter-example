@@ -14,7 +14,7 @@ export class AuthMiddleware implements NestMiddleware {
         throw new Error('Undefined trusted token');
       }
   
-      const authHeader = req.header('authorization')
+      const authHeader = req.header('authorization');
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         res.status(400).send({ message: 'Missing authorization header' });
         return;
